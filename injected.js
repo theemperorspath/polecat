@@ -6,8 +6,8 @@
 
 (function () {
   "use strict";
-  if (window.__CSPT_HUNTER__) return;
-  window.__CSPT_HUNTER__ = true;
+  if (window.__POLECAT__) return;
+  window.__POLECAT__ = true;
 
   var DEFAULTS = {
     minLen: 3, matchMode: "both", sameOriginOnly: false, colocationGuard: true,
@@ -17,17 +17,17 @@
   };
   var SET = Object.assign({}, DEFAULTS);
 
-  var PROBE_TAG = "CSPTHUNTERPROBE";
+  var PROBE_TAG = "POLECATPROBE";
   var origFetch = window.fetch;
   var OrigXHR = window.XMLHttpRequest;
   var origBeacon = navigator.sendBeacon ? navigator.sendBeacon.bind(navigator) : null;
 
   function post(type, payload) {
-    try { window.postMessage({ source: "CSPT_HUNTER", type: type, payload: payload }, "*"); } catch (e) {}
+    try { window.postMessage({ source: "POLECAT", type: type, payload: payload }, "*"); } catch (e) {}
   }
 
   post("alive", { href: location.href });
-  try { console.debug("[CSPT-Hunter] hook installed on " + location.href); } catch (e) {}
+  try { console.debug("[Polecat] hook installed on " + location.href); } catch (e) {}
 
   function dec(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }
 
@@ -196,7 +196,7 @@
     if (typeof orig !== "function") return;
     history[m] = function () {
       var r = orig.apply(this, arguments);
-      try { window.postMessage({ source: "CSPT_HUNTER_ROUTE" }, "*"); } catch (e) {}
+      try { window.postMessage({ source: "POLECAT_ROUTE" }, "*"); } catch (e) {}
       return r;
     };
   });
@@ -205,11 +205,11 @@
   window.addEventListener("message", function (e) {
     if (e.source !== window || !e.data) return;
     var d = e.data;
-    if (d.source === "CSPT_HUNTER_CONFIG") { if (d.settings) SET = Object.assign({}, DEFAULTS, d.settings); return; }
-    if (d.source === "CSPT_HUNTER_PING") { post("alive", { href: location.href }); return; }
-    if (d.source === "CSPT_HUNTER_PROBE") {
+    if (d.source === "POLECAT_CONFIG") { if (d.settings) SET = Object.assign({}, DEFAULTS, d.settings); return; }
+    if (d.source === "POLECAT_PING") { post("alive", { href: location.href }); return; }
+    if (d.source === "POLECAT_PROBE") {
       runProbe(d.req || {}).then(function (result) {
-        try { window.postMessage({ source: "CSPT_HUNTER_PROBE_RESULT", id: d.id, result: result }, "*"); } catch (x) {}
+        try { window.postMessage({ source: "POLECAT_PROBE_RESULT", id: d.id, result: result }, "*"); } catch (x) {}
       });
     }
   });

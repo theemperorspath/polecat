@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "CSPT-Hunter",
+  "name": "Polecat",
   "version": "2.0.0",
-  "description": "Client-Side Path Traversal detector for Firefox by Zypher. Flags when the current URL is reflected into an outgoing request path, and surfaces credentialed state-changing sinks as CSPT2CSRF candidates.",
+  "description": "Client Side Path Traversal detector for Firefox by Zypher. Flags when the current URL is reflected into an outgoing request path, and surfaces credentialed state-changing sinks as CSPT2CSRF candidates.",
   "browser_specific_settings": {
     "gecko": {
-      "id": "cspt-hunter@zypher.sh",
+      "id": "polecat@zypher.sh",
       "strict_min_version": "128.0"
     }
   },
@@ -47,7 +47,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "CSPT-Hunter by Zypher",
+    "default_title": "Polecat by Zypher",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",

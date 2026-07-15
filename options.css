@@ -27,6 +27,12 @@ body { background: var(--bg); color: var(--text); font: 13px/1.5 var(--mono); bo
 .word { font-family: var(--sans); font-weight: 800; font-size: 20px; letter-spacing: 2px; }
 .word .slash { color: var(--red); margin: 0 4px; }
 .word .tool { color: var(--dim); font-weight: 700; }
+.word .zlink { color: inherit; text-decoration: none; transition: color .12s; }
+.word .zlink:hover { color: var(--red-bright); }
+.marklink { display: inline-flex; }
+.marklink:hover { opacity: .85; }
+.ofoot a { color: var(--red-bright); text-decoration: none; }
+.ofoot a:hover { color: #fff; }
 .tag { font-size: 10.5px; color: var(--faint); letter-spacing: .5px; text-transform: uppercase; margin-top: 5px; }
 .ver { font-size: 11px; color: var(--faint); }
 .ver a { color: var(--red-bright); text-decoration: none; }

@@ -14,16 +14,16 @@
   window.addEventListener("message", function (e) {
     if (e.source !== window || !e.data) return;
     var d = e.data;
-    if (d.source === "CSPT_HUNTER" && d.type === "finding") {
+    if (d.source === "POLECAT" && d.type === "finding") {
       try { chrome.runtime.sendMessage({ type: "finding", finding: d.payload }); } catch (x) {}
-    } else if (d.source === "CSPT_HUNTER" && d.type === "alive") {
+    } else if (d.source === "POLECAT" && d.type === "alive") {
       try { chrome.runtime.sendMessage({ type: "alive" }); } catch (x) {}
-    } else if (d.source === "CSPT_HUNTER_ROUTE") {
+    } else if (d.source === "POLECAT_ROUTE") {
       reportUrl();
     }
   });
 
-  try { window.postMessage({ source: "CSPT_HUNTER_PING" }, "*"); } catch (e) {}
+  try { window.postMessage({ source: "POLECAT_PING" }, "*"); } catch (e) {}
 
   function reportUrl() {
     try { chrome.runtime.sendMessage({ type: "route", url: location.href }); } catch (x) {}
@@ -34,7 +34,7 @@
 
   function pushSettings(s) {
     var merged = Object.assign({}, DEFAULTS, s || {});
-    try { window.postMessage({ source: "CSPT_HUNTER_CONFIG", settings: merged }, "*"); } catch (x) {}
+    try { window.postMessage({ source: "POLECAT_CONFIG", settings: merged }, "*"); } catch (x) {}
   }
   try {
     chrome.storage.local.get(["settings"], function (r) { pushSettings(r && r.settings); });
@@ -47,13 +47,13 @@
     if (msg && msg.type === "run_probe") {
       var id = "probe_" + Math.random().toString(36).slice(2);
       var handler = function (e) {
-        if (e.source === window && e.data && e.data.source === "CSPT_HUNTER_PROBE_RESULT" && e.data.id === id) {
+        if (e.source === window && e.data && e.data.source === "POLECAT_PROBE_RESULT" && e.data.id === id) {
           window.removeEventListener("message", handler);
           sendResponse(e.data.result);
         }
       };
       window.addEventListener("message", handler);
-      try { window.postMessage({ source: "CSPT_HUNTER_PROBE", id: id, req: msg.req }, "*"); } catch (x) {}
+      try { window.postMessage({ source: "POLECAT_PROBE", id: id, req: msg.req }, "*"); } catch (x) {}
       return true;
     }
   });

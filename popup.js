@@ -217,7 +217,7 @@ function exportAs(kind) {
     download("cspt-findings.csv", "text/csv", head + body); return;
   }
   if (kind === "md") {
-    var lines = ["# CSPT-Hunter findings", "", "Target: `" + TAB_URL + "`  ", "Generated: " + new Date().toISOString(), ""];
+    var lines = ["# Polecat findings", "", "Target: `" + TAB_URL + "`  ", "Generated: " + new Date().toISOString(), ""];
     rows.forEach(function (f, i) {
       lines.push("## " + (i + 1) + ". " + (f.severity || "info").toUpperCase() + " — " + f.method + " " + f.url);
       if (f.cspt2csrf) lines.push("- **CSPT2CSRF candidate** (credentialed state-changing sink)");

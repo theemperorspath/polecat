@@ -36,7 +36,7 @@ function bind() {
 
   $("exportSettings").addEventListener("click", function () {
     var blob = new Blob([JSON.stringify({ settings: SET, ignore: IGN }, null, 2)], { type: "application/json" });
-    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "cspt-hunter-config.json"; a.click();
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "polecat-config.json"; a.click();
   });
   $("importSettings").addEventListener("click", function () { $("importFile").click(); });
   $("importFile").addEventListener("change", function () {
