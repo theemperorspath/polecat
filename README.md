@@ -6,7 +6,7 @@
 
 ### Client Side Path Traversal detector for Firefox
 
-*Watch every request. Catch every reflection. Ship every CSPT2CSRF.*
+*Watch every request. Catch every reflection. Hunt every CSPT2CSRF.*
 
 <br>
 
