@@ -50,7 +50,7 @@ That route-to-path echo is the CSPT injection point. Credentialed, state-changin
 ## Install
 
 ```bash
-git clone https://github.com/theemperorspath/cspt-hunter polecat
+git clone https://github.com/theemperorspath/polecat
 ```
 
 **Temporary load (for testing):**
@@ -216,7 +216,7 @@ Credentialed is inferred from: `fetch` with `credentials !== 'omit'` same-origin
 
 **Polecat is a [Zypher](https://zypher.sh) tool.** Authorized testing only.
 
-[Website](https://zypher.sh) · [Research](https://zypher.sh/research/cspt-hunter/) · [Report an issue](https://github.com/theemperorspath/cspt-hunter/issues)
+[Website](https://zypher.sh) · [Research](https://zypher.sh/research/cspt-hunter/) · [Report an issue](https://github.com/theemperorspath/polecat/issues)
 
 <sub>Built by hunters, for hunters.</sub>
 
