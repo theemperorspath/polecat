@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CSPT-Hunter self-test</title>
+  <style>
+    body { font: 14px/1.5 system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #222; }
+    code { background: #f0f0f0; padding: 1px 5px; border-radius: 4px; }
+    button { font: inherit; padding: 8px 12px; margin: 4px 6px 4px 0; cursor: pointer; }
+    .ok { color: #0a7; } .box { border: 1px solid #ddd; border-radius: 8px; padding: 14px; margin: 14px 0; }
+    #log { white-space: pre-wrap; background: #0f1216; color: #b8e6a8; padding: 10px; border-radius: 8px; font-family: ui-monospace, monospace; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>CSPT-Hunter self-test</h1>
+  <p>Serve this over http, not <code>file://</code> (content scripts don't run on file URLs by default):</p>
+  <pre><code>cd cspt-hunter/test
+python3 -m http.server 8000
+# open http://localhost:8000/positive.html?id=inv_88371&doc=report2024</code></pre>
+
+  <div class="box">
+    <p>On load, this page fires same-origin requests whose paths embed the <code>id</code> and <code>doc</code>
+    query values, plus a <code>#hash</code>-sourced one. Each request will 404 (there's no real API) but the hook fires
+    at call time, so <b>the popup should light up</b> with reflected findings and the toolbar badge should increment.</p>
+    <button id="run">Re-run GET reflections</button>
+    <button id="post">Fire credentialed POST (CSPT2CSRF demo)</button>
+    <button id="img">Fire reflected image load (resource detector)</button>
+  </div>
+
+  <p>Expected in the popup: <span class="ok">query:id</span>, <span class="ok">query:doc</span>,
+  a <span class="ok">hash</span> match, and the POST tagged <span class="ok">CSPT2CSRF</span>.</p>
+
+  <div id="log">waiting…</div>
+
+  <script>
+    // Put a value in the hash so the hash-source path has something to match.
+    if (!location.hash) location.hash = "#/report/section_alpha01";
+
+    const log = (m) => { const el = document.getElementById("log"); el.textContent += "\n" + m; };
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id") || "inv_88371";
+    const doc = params.get("doc") || "report2024";
+    const hashSeg = (location.hash.match(/[^\/#?]+/g) || ["section_alpha01"]).pop();
+
+    function runGets() {
+      // query -> path segment (exact)
+      fetch("/api/v2/documents/" + encodeURIComponent(id)).catch(() => {});
+      // query -> path segment (contained: doc inside doc.json)
+      fetch("/api/reports/" + doc + ".json").catch(() => {});
+      // hash -> path segment
+      fetch("/api/sections/" + hashSeg).catch(() => {});
+      log("fired 3 GET reflections for id=" + id + ", doc=" + doc + ", hash=" + hashSeg);
+    }
+
+    document.getElementById("run").addEventListener("click", runGets);
+
+    document.getElementById("post").addEventListener("click", () => {
+      fetch("/api/tenant/" + id + "/members", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json", "X-CSRF-Token": "demo-token" },
+        body: JSON.stringify({ role: "admin" })
+      }).catch(() => {});
+      log("fired credentialed POST -> should tag CSPT2CSRF");
+    });
+
+    document.getElementById("img").addEventListener("click", () => {
+      const im = new Image();
+      im.src = "/assets/" + doc + "/logo.png";
+      log("fired reflected <img> load -> resource detector (webRequest)");
+    });
+
+    // auto-run on load
+    runGets();
+  </script>
+</body>
+</html>

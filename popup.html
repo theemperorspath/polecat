@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="hdr">
+    <div class="brand">
+      <img class="mark" src="icons/icon-48.png" alt="Zypher" />
+      <div class="brandtext">
+        <div class="word">ZYPHER<span class="slash">/</span><span class="tool">CSPT-HUNTER</span></div>
+        <div class="tag">client-side path traversal recon</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <span class="live" id="live" title="hook status"><span class="pip"></span><span id="live-txt">…</span></span>
+      <button class="gear" id="settings" title="Settings">SETTINGS</button>
+    </div>
+  </header>
+
+  <div id="status" class="status">checking hook…</div>
+
+  <section class="stats">
+    <button class="stat" data-f="all"><span id="c-total">0</span><label>records</label></button>
+    <button class="stat sev-high" data-f="cspt2csrf"><span id="c-high">0</span><label>high</label></button>
+    <button class="stat sev-med" data-f="reflected"><span id="c-med">0</span><label>reflected</label></button>
+    <button class="stat sev-low" data-f="heuristic"><span id="c-low">0</span><label>heuristic</label></button>
+  </section>
+
+  <section class="toolbar">
+    <input id="search" class="search" type="text" placeholder="filter records: path, host, source…" spellcheck="false" />
+    <div class="tb-row">
+      <div class="chips" id="filters">
+        <button class="chip active" data-f="all">all</button>
+        <button class="chip" data-f="cspt2csrf">csrf</button>
+        <button class="chip" data-f="reflected">reflected</button>
+        <button class="chip" data-f="heuristic">heuristic</button>
+      </div>
+      <label class="sortwrap">sort
+        <select id="sort" class="sel">
+          <option value="severity">severity</option>
+          <option value="newest">newest</option>
+          <option value="method">method</option>
+        </select>
+      </label>
+    </div>
+  </section>
+
+  <main id="list" class="list">
+    <div class="empty" id="empty">
+      <div class="empty-mark">//</div>
+      No records yet. Exercise the target and reflections land here.
+    </div>
+  </main>
+
+  <footer class="ftr">
+    <span id="mutes" class="mutes"></span>
+    <button id="clear" class="btn">clear</button>
+    <label class="exportwrap">
+      <select id="export" class="sel">
+        <option value="" selected disabled>export</option>
+        <option value="json">JSON</option>
+        <option value="md">Markdown</option>
+        <option value="csv">CSV</option>
+      </select>
+    </label>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "CSPT-Hunter",
+  "version": "2.0.0",
+  "description": "Client-Side Path Traversal detector for Firefox by Zypher. Flags when the current URL is reflected into an outgoing request path, and surfaces credentialed state-changing sinks as CSPT2CSRF candidates.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "cspt-hunter@zypher.sh",
+      "strict_min_version": "128.0"
+    }
+  },
+  "permissions": [
+    "webRequest",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["injected.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "CSPT-Hunter by Zypher",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png"
+    }
+  }
+}

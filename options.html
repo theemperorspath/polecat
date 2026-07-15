@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSPT-Hunter · Settings</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="ohdr">
+      <div class="brand">
+        <img class="mark" src="icons/icon-128.png" alt="Zypher" />
+        <div>
+          <div class="word">ZYPHER<span class="slash">/</span><span class="tool">CSPT-HUNTER</span></div>
+          <div class="tag">settings · client-side path traversal recon</div>
+        </div>
+      </div>
+      <div class="ver">v2.0 · <a href="https://zypher.sh" target="_blank" rel="noreferrer">zypher.sh</a></div>
+    </header>
+
+    <div class="saved" id="saved">saved</div>
+
+    <section class="sec">
+      <div class="eyebrow">01 — detection</div>
+      <div class="row">
+        <div class="label"><div class="name">Minimum segment length</div><div class="desc">Ignore reflected values shorter than this. Lower catches short IDs but adds noise.</div></div>
+        <div class="control"><input type="number" id="minLen" class="num" min="1" max="12" /></div>
+      </div>
+      <div class="row">
+        <div class="label"><div class="name">Match mode</div><div class="desc">Exact only, or also match when a source value is contained in a segment (e.g. <code>123</code> in <code>123.json</code>).</div></div>
+        <div class="control"><select id="matchMode" class="sel"><option value="both">exact + contained</option><option value="exact">exact only</option></select></div>
+      </div>
+      <div class="row">
+        <div class="label"><div class="name">Co-location guard</div><div class="desc">Suppress reflections that fall inside the shared path prefix of the page and request. Kills the "page fetching its own directory" false positive.</div></div>
+        <div class="control"><label class="sw"><input type="checkbox" id="colocationGuard" /><span></span></label></div>
+      </div>
+      <div class="row">
+        <div class="label"><div class="name">Dynamic values only</div><div class="desc">For path sources, only flag identifier-looking segments (has a digit, UUID, or long token). Query and hash sources are always checked.</div></div>
+        <div class="control"><label class="sw"><input type="checkbox" id="dynamicOnly" /><span></span></label></div>
+      </div>
+      <div class="row">
+        <div class="label"><div class="name">Same-origin only</div><div class="desc">Ignore cross-origin requests entirely. CSPT is same-origin by nature, so this is usually safe and quieter.</div></div>
+        <div class="control"><label class="sw"><input type="checkbox" id="sameOriginOnly" /><span></span></label></div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="eyebrow">02 — detectors</div>
+      <div class="row">
+        <div class="label"><div class="name">fetch / XMLHttpRequest</div><div class="desc">The core hook. Covers the vast majority of CSPT.</div></div>
+        <div class="control"><label class="sw"><input type="checkbox" id="detectFetchXHR" /><span></span></label></div>
+      </div>
+      <div class="row">
+        <div class="label"><div class="name">navigator.sendBeacon</div><div class="desc">Credentialed POST-style telemetry. Occasionally an overlooked sink.</div></div>
+        <div class="control"><label class="sw"><input type="checkbox" id="detectBeacon" /><span></span></label></div>
+      </div>
+      <div class="row">
+        <div class="label"><div class="name">EventSource (SSE)</div><div class="desc">Server-sent event stream URLs.</div></div>
+        <div class="control"><label class="sw"><input type="checkbox" id="detectEventSource" /><span></span></label></div>
+      </div>
+      <div class="row">
+        <div class="label"><div class="name">Resource loads</div><div class="desc">img / script / link / iframe / websocket via webRequest. Catches CSS-injection CSPT the page hook can't see.</div></div>
+        <div class="control"><label class="sw"><input type="checkbox" id="detectResource" /><span></span></label></div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="eyebrow">03 — behavior</div>
+      <div class="row">
+        <div class="label"><div class="name">Badge counts</div><div class="desc">What the toolbar number tallies.</div></div>
+        <div class="control"><select id="badgeCount" class="sel"><option value="all">all records</option><option value="high">high severity only</option></select></div>
+      </div>
+      <div class="row">
+        <div class="label"><div class="name">Clear on navigation</div><div class="desc">Reset records when the tab does a full page load. Turn off to accumulate across navigations.</div></div>
+        <div class="control"><label class="sw"><input type="checkbox" id="clearOnNav" /><span></span></label></div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="eyebrow">04 — canary</div>
+      <div class="row">
+        <div class="label"><div class="name">Canary token</div><div class="desc">Seed this wherever your input persists, then browse. A hit means a stored/DOM value reached a request path.</div></div>
+        <div class="control canary-c">
+          <input type="text" id="canary" class="txt" placeholder="none set" spellcheck="false" />
+          <button class="btn" id="genCanary">generate</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="eyebrow">05 — muted</div>
+      <div id="muteList" class="mutelist"><div class="mute-empty">Nothing muted. Mute noisy hosts or endpoints from a record in the popup.</div></div>
+      <div class="row-actions"><button class="btn danger" id="clearMutes">clear all mutes</button></div>
+    </section>
+
+    <section class="sec">
+      <div class="eyebrow">06 — data</div>
+      <div class="row-actions">
+        <button class="btn" id="exportSettings">export settings</button>
+        <button class="btn" id="importSettings">import settings</button>
+        <input type="file" id="importFile" accept="application/json" style="display:none" />
+        <button class="btn danger" id="reset">reset to defaults</button>
+      </div>
+    </section>
+
+    <footer class="ofoot">CSPT-Hunter is a Zypher tool. Run it against targets you're authorized to test.</footer>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>
