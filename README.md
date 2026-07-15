@@ -15,7 +15,7 @@
 
 ## About
 
-CSPT Hunter was originally built for **internal use** at [Zypher](https://zypher.sh), our offensive security firm, to speed up Client Side Path Traversal discovery during engagements. We used it long enough to trust it, then decided to publish it so the wider community can hunt CSPT the same way we do.
+CSPT Hunter was originally built for **internal use** at [Zypher](https://zypher.sh), my offensive security firm, to speed up Client Side Path Traversal discovery during engagements. We used it long enough to trust it, then decided to publish it so the wider community can hunt CSPT the same way we do.
 
 You browse a target normally. When a value from the current URL (a path segment, query value, or `#hash` segment) shows up inside the **path** of an outgoing request, CSPT Hunter surfaces it as a record and increments the toolbar badge. That route to path echo is the CSPT injection point. Credentialed, state-changing sinks are flagged as **CSPT2CSRF** candidates, the class where the app's auto-attached token rides whatever path you bend.
 
